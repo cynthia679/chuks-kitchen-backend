@@ -1,32 +1,108 @@
-<<<<<<< HEAD
 # Chuks Kitchen Backend
 
-This is the backend for **Chuks Kitchen**, a food ordering and customer management platform.  
-Built with **Node.js** and **Express**, it supports user registration, food management, cart, orders, and simulated payments.
+Backend API for Chuks Kitchen food ordering system built with Node.js and Express.
 
-## Features
+---
 
-- User signup and verification
-- Browse available food items
-- Add food items to cart
+## 📌 Project Overview
+
+This system simulates a food ordering platform where users can:
+
+- Register
+- Browse available meals
+- Add meals to cart
 - Place orders
-- Simulated payment confirmation
-- Track and update order status
-- Admin simulation for adding food items
+- Make simulated payments
+- Track order status
 
-## Getting Started
+Data is stored in-memory using arrays and objects.
 
-### Prerequisites
-- Node.js installed
-- npm installed
+---
 
-### Installation
+## 🛠 Tech Stack
 
+- Node.js
+- Express.js
+- REST API
+- In-memory storage
+
+---
+
+## 🚀 Running the Project
+
+### Install Dependencies
 ```bash
-git clone https://github.com/<cynthia679>/chuks-kitchen.git
-cd chuks-kitchen-backend
 npm install
-=======
-# chuks-kitchen-backend
-Backend API for Chuks Kitchen food ordering system
->>>>>>> d10a5d5d66da7e66819771b956b2ed97d8f37b4f
+```
+
+### Start Server
+```bash
+node server.js
+```
+
+Server runs at:
+```
+http://localhost:3000
+```
+
+---
+
+## 📚 API Endpoints
+
+### User
+- POST /signup
+- POST /verify
+
+### Food
+- GET /foods
+- POST /foods
+
+### Cart
+- POST /cart
+- GET /cart/:customer_name
+- DELETE /cart/:customer_name
+
+### Orders
+- POST /orders
+- POST /orders/:id/pay
+- GET /orders
+- GET /orders/:id
+- GET /orders/user/:customer_name
+- PATCH /orders/:id/status
+- POST /orders/:id/cancel
+- DELETE /orders/:id
+
+---
+
+## 🔄 Order Lifecycle
+
+Pending → Confirmed → Preparing → Out for Delivery → Completed
+
+Orders may be cancelled before completion.
+
+---
+
+## ⚠ Edge Case Handling
+
+- Duplicate user registration blocked
+- Unavailable food items blocked
+- Status update blocked if payment not confirmed
+- Completed orders cannot be cancelled
+
+---
+
+## 📈 Scalability Thoughts
+
+If scaled to 10,000+ users:
+
+- Replace in-memory storage with a database
+- Implement authentication (JWT)
+- Add payment gateway integration
+- Use role-based access control
+- Deploy using Docker and cloud infrastructure
+
+---
+
+## 📄 License
+
+MIT License
