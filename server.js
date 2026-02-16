@@ -115,7 +115,7 @@ app.delete('/cart/:customer_name', (req, res) => {
 });
 
 // ======================
-// Orders routes
+// Orders routes (allow partial orders)
 // ======================
 app.post('/orders', (req, res) => {
   const { customer_name, items } = req.body || {};
@@ -127,31 +127,47 @@ app.post('/orders', (req, res) => {
   if (!user) return res.status(400).json({ message: "User must register before placing an order" });
 
   let total = 0;
+  const availableItems = [];
   const unavailableItems = [];
 
+  // Check which items are available
   items.forEach(itemId => {
     const food = foods.find(f => f.id === itemId);
     if (!food || !food.is_available) unavailableItems.push(itemId);
-    else total += food.price;
+    else {
+      total += food.price;
+      availableItems.push(itemId);
+    }
   });
 
-  if (unavailableItems.length > 0) {
-    return res.status(400).json({ message: "Some items are unavailable", unavailableItems });
+  if (availableItems.length === 0) {
+    return res.status(400).json({ message: "None of the selected items are available", unavailableItems });
   }
 
+  // Create order with only available items
   const order = {
     id: orderIdCounter++,
     customer_name,
-    items,
+    items: availableItems,
     total,
     status: "Pending",
-    payment_status: "Unpaid"
+    payment_status: "Unpaid",
+    unavailable_items: unavailableItems.length ? unavailableItems : undefined
   };
 
   orders.push(order);
-  carts[customer_name] = [];
-  res.status(201).json({ message: "Order created", order });
+
+  // Update cart: keep only unavailable items in the cart
+  if (!carts[customer_name]) carts[customer_name] = [];
+  carts[customer_name] = carts[customer_name].filter(i => unavailableItems.includes(i));
+
+  res.status(201).json({
+    message: "Order created with available items",
+    order,
+    unavailableItems: unavailableItems.length ? unavailableItems : undefined
+  });
 });
+
 
 // Simulated payment
 app.post('/orders/:id/pay', (req, res) => {
