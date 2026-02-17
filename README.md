@@ -58,7 +58,7 @@ Data is stored in-memory using arrays and objects.
 
 ### 1️⃣ Clone the Repository
 ```bash
-git clone https://github.com/<cynthia679>/chuks-kitchen.git
+git clone https://github.com/cynthia679/chuks-kitchen-backend.git
 cd chuks-kitchen-backend
 npm install
 
@@ -112,7 +112,3 @@ If scaled to 10,000+ users:
 - Deploy using Docker and cloud infrastructure
 
 ---
-
-## 📄 License
-
-MIT License
